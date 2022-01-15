@@ -31,11 +31,14 @@ Disposable Mail & READ/BURN Messages
                   python IIPV_MAPR.py -r [target_mail]
                   python IIPV_MAPR.py --read [target_mail]
                   
+                  python IIPV_MAPR.py -T [target_mail]
+                  python IIPV_MAPR.py --readwithtor [target_mail]
+                  
                   ####   -h    --help             how to use   ####
                   
                   [ -g ]  --get                       -> GET NEW DISPOSABLE MAIL
                   [ -r ]  --read                      -> READ MESSAGE
-                  [ -T ]  --read                      -> READ MESSAGE WITH TOR CONNECTION
+                  [ -T ]  --readwithtor               -> READ MESSAGE WITH TOR CONNECTION
                   
                   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                   -------------------------------------------------------------------------------------
