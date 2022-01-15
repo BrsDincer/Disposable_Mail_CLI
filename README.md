@@ -45,6 +45,7 @@ Disposable Mail & READ/BURN Messages
                   [NOTED - IMPORTANT]
                   + USE VPN AND PROXIES
                   + Stem Project must be installed to read messages with TOR link
+                  + To use the TOR function, you must first run the TOR browser and get the relay
                   -------------------------------------------------------------------------------------
                   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                   
