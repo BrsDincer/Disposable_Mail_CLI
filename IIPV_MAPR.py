@@ -55,7 +55,7 @@ class CREATOR_MESSAGE():
              I::::::::II::::::::I ...... P::::::::P                         V:::::V          
              I01000110II00110100I .::::. P01000110P                          V:::V     --> CREATED FOR FREE NET
              IIIIIIIIIIIIIIIIIIII ...... PPPPPPPPPP                           VVV      --> open-source culture
-                                                                                       --> ANTI-SPY
+                                                                                       --> Disposable Mail Service
                   
                  -------------------------------------------------------------------------------------
                  ############################################################################################################
