@@ -107,19 +107,30 @@ You can access it through TOR Browser
                   python IIPV_MAPR.py -T [target_mail]
                   python IIPV_MAPR.py --readwithtor [target_mail]
                   
+                  python IIPV_MAPR.py -E [target_mail]
+                  python IIPV_MAPR.py --getwithpass [target_mail]
+                  
+                  python IIPV_MAPR.py -P [target_mail]
+                  python IIPV_MAPR.py --allintor [target_mail]
+                  
                   ####   -h    --help             how to use   ####
                   
                   [ -g ]  --get                       -> GET NEW DISPOSABLE MAIL
                   [ -r ]  --read                      -> READ MESSAGE
-                  [ -T ]  --readwithtor               -> READ MESSAGE WITH TOR CONNECTION
+                  [ -T ]  --readwithtor               -> READ MESSAGE VIA TOR CONNECTION
+                  [ -E ]  --getwithpass               -> READ MESSAGE WITH PASSWORD VIA TOR CONNECTION
+                  [ -P ]  --allintor                  -> ALL IN TOR
                   
                   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                   -------------------------------------------------------------------------------------
                   [NOTED - IMPORTANT]
                   + USE VPN AND PROXIES
-                  + Stem Project must be installed to read messages with TOR link
+                  + Stem Project must be installed to read messages via TOR 
                   + To use the TOR function, you must first run the TOR browser and get the relay
                   -------------------------------------------------------------------------------------
                   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                  
+                  
+                  """)
                   
                   
