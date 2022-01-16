@@ -53,7 +53,9 @@ Example for pass:
 PASS:geADAES231aSwEExc[:]
 
 
-"PASS:" must be at the beginning of the password, and at the end you have to use "[:]" Everything you specify between is a password
+"PASS:" must be at the beginning of the password, and at the end you have to use "[:]"
+
+Everything you specify between is a password
 
 
 Determine what you want
