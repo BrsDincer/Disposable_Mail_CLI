@@ -70,18 +70,25 @@ class CREATOR_MESSAGE():
                   python IIPV_MAPR.py -T [target_mail]
                   python IIPV_MAPR.py --readwithtor [target_mail]
                   
+                  python IIPV_MAPR.py -E [target_mail]
+                  python IIPV_MAPR.py --getwithpass [target_mail]
+                  
+                  python IIPV_MAPR.py -P [target_mail]
+                  python IIPV_MAPR.py --allintor [target_mail]
+                  
                   ####   -h    --help             how to use   ####
                   
                   [ -g ]  --get                       -> GET NEW DISPOSABLE MAIL
                   [ -r ]  --read                      -> READ MESSAGE
                   [ -T ]  --readwithtor               -> READ MESSAGE VIA TOR CONNECTION
-                  [ -E ]  --getwithpass               -> READ MESSAGE WITH PASSWORD VIA TOR CONNECTION 
+                  [ -E ]  --getwithpass               -> READ MESSAGE WITH PASSWORD VIA TOR CONNECTION
+                  [ -P ]  --allintor                  -> ALL IN TOR
                   
                   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                   -------------------------------------------------------------------------------------
                   [NOTED - IMPORTANT]
                   + USE VPN AND PROXIES
-                  + Stem Project must be installed to read messages with TOR link
+                  + Stem Project must be installed to read messages via TOR 
                   + To use the TOR function, you must first run the TOR browser and get the relay
                   -------------------------------------------------------------------------------------
                   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -243,6 +250,7 @@ class TOR_CONNECTION():
                   print("\n")
                   print("SERVICE IS AVAILABLE: [--> %s.onion ]" % response.service_id)
                   print("PLEASE USE TOR BROWSER TO CHECK YOUR MESSAGE")
+                  print("[>] CTRL+C FOR CANCEL THE PROCESS")
                   print("\n")
                   try:
                       app.run(debug=False)
@@ -265,7 +273,131 @@ class SPLIT_MESSAGE():
                     return get_last_pass[0]
         except:
             pass
-
+class ONLY_TOR():
+    def ALL_IN_RUN(user_input):
+        try:
+            print("\n")
+            print('[  CONNECTING TO TOR BASE  ]')
+            with Controller.from_port() as controller:
+                  controller.authenticate()
+                  response = controller.create_ephemeral_hidden_service({80: 5000}, await_publication = True)
+                  
+                  print("PLEASE USE TOR BROWSER TO CHECK YOUR MESSAGE")
+                  print("\n")
+                  cont_before_mail = f"http://api.guerrillamail.com/ajax.php?f=set_email_user&email_user={str(user_input)}"
+                  check_mail = "http://api.guerrillamail.com/ajax.php?f=check_email&seq=1"
+                  header_target = GET_DOCUMENT.GET_HEADER()
+                  r_q = requests.Session()
+                  r_q.get(cont_before_mail,
+                        headers=header_target)
+                  get_mail = json.loads(r_q.get(check_mail,
+                                              headers=header_target).text)
+                  mail_id = get_mail['list'][0]['mail_id']
+                  print("\n")
+                  print("SERVICE IS AVAILABLE: [--> %s.onion ]" % response.service_id)
+                  print(CREATOR_MESSAGE.MAIN_PRINT())
+                  print("\n")
+                  print("\n")
+                  fetch_mail_on = f"http://api.guerrillamail.com/ajax.php?f=fetch_email&email_id={mail_id}"
+                  fetch_get = r_q.get(fetch_mail_on,
+                                    headers=header_target)
+                  print(fetch_get.headers)
+                  fetch_json = json.loads(fetch_get.text)
+                  print("[>] Be sure to save the message before closing or refreshing the page")
+                  print("\n")
+                  print("[>] MESSAGE WILL BE DELETED AFTER SHUTDOWN")
+                  print("[>] SITE WILL BE BLOCKED WHEN YOU TURN OFF THE CONNECTION")
+                  print("[>] CONNECTIVITY MAY BE SLOW DEPENDING ON YOUR INTERNET, PLEASE WAIT")
+                  print("[>] CTRL+C FOR CANCEL THE PROCESS")
+                  print("[>] STARTING...")
+                  print("\n")
+                  html_main = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta name="viewport" content="width=device-width">
+    <style>
+    /* BODY CSS */
+    body {
+    background-color: white;
+    text-align: left;
+    line-height: 1.5;
+    letter-spacing: 0.4px;
+    color: #363636;
+    font-family: Monaco, sans-serif;
+    font-size: 15px;
+    padding-right: 20px;
+    padding-left: 20px;
+    }
+    /* H2 H3 CSS */
+    h2, h3 {
+    color: #a30000;
+    font-family: Verdana, sans-serif;
+    font-size: 18px;
+    letter-spacing: 5px;
+    text-align: left;
+    padding-top: 4px;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    overflow: auto;
+    }
+    h4 {
+    color: black;
+    font-family: Verdana, sans-serif;
+    font-size: 14px;
+    letter-spacing: 5px;
+    text-align: left;
+    padding-top: 4px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    overflow: auto;
+    }
+    /* P CSS */
+    p {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    overflow: auto;
+    }
+    </style>
+    <title>IIPV</title>
+    </head>
+    <body>
+    <h2>DISPOSABLE MAIL PRIVACY</h2>
+    <h4>FROM: %s</h4>
+    <h4>SUBJECT: %s</h4>
+    %s
+    </body>
+    </html>
+    """%(fetch_json['mail_from'],fetch_json['mail_subject'],fetch_json["mail_body"])
+                  app = Flask(__name__,template_folder='template')
+                  @app.route('/')
+                  def index():
+                      return html_main
+                  try:
+                      app.run(debug=False)
+                  except:
+                      pass
+                  finally:
+                      delete_mail = f"http://api.guerrillamail.com/ajax.php?f=del_email&email_ids[]={mail_id}"
+                      r_q.get(delete_mail)
+                      print("\n")
+                      print("[>] MAIL HAS BEEN DELETED")
+                      print("\n")
+                      r_q.close()
+                      print("\n")
+                      print("[SHUTTING DOWN BY USER]")
+                      print("\n")
+        except:
+            print("\n")
+            print("TOR IS NOT ACTIVE OR MAIL MAY NOT BE SENT")
+            print("\n")
+            
 class DEFINE_PROCESS():
     def GET_NEW_MAIL():
         try:
@@ -435,6 +567,11 @@ class RUN_MAIN():
                             type="string",
                             dest="x_getpass",
                             help="READ MESSAGE WITH PASSWORD VIA TOR CONNECTION")
+        run_args.add_option("-P",
+                            "--allintor",
+                            type="string",
+                            dest="x_alltor",
+                            help="ALL IN TOR")
         run_ops,arq_ops = run_args.parse_args()
         if run_ops.x_help:
             CREATOR_MESSAGE.SHOW_INFO()
@@ -450,6 +587,9 @@ class RUN_MAIN():
         elif run_ops.x_getpass:
             mail_target = str(run_ops.x_getpass).replace(" ","")
             DEFINE_PROCESS.GET_MESSAGE_WITH_TOR(mail_target,pass_on=True)
+        elif run_ops.x_alltor:
+            mail_target = str(run_ops.x_alltor).replace(" ","")
+            ONLY_TOR.ALL_IN_RUN(mail_target)
         else:
             CREATOR_MESSAGE.SHOW_INFO()
             pass
