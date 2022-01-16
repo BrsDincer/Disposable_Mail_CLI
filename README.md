@@ -1,6 +1,73 @@
 # Disposable Mail CLI
 Disposable Mail & READ/BURN Messages
 
+for WWW:
+https://share.streamlit.io/brsdincer/disposable_mail_privacy/main/disposable_main_stream.py
+
+**[-g]**
+
+You can get disposable e-mail
+
+Compatible with proxy-chain
+
+
+
+**[-r]**
+
+You can read the message that comes to your disposable e-mail with the same logic
+
+The message is deleted after you read it
+
+Compatible with proxy-chain
+
+
+
+**[-T]**
+
+Creates a site for you with an ".onion" extension
+
+All messages received in disposable mail are embedded there
+
+You can access it through TOR Browser
+
+
+
+**[-E]**
+
+Creates a site for you with an ".onion" extension
+
+All messages received in disposable mail are embedded there
+
+You can only access it with the password set by the sender
+
+If the password is not correct, access is denied
+
+You can access it through TOR Browser
+
+
+
+Example for pass:
+
+PASS:geADAES231aSwEExc[:]
+
+"PASS:" must be at the beginning of the password, and at the end you have to use "[:]" Everything you specify between is a password
+
+Determine what you want
+
+
+
+**[-P]**
+
+Creates a site for you with an ".onion" extension
+
+The whole process takes place on TOR
+
+All messages received in disposable mail are embedded there
+
+Connection via TOR proxy via external disposable mail
+
+You can access it through TOR Browser
+
                   
                   
              IIIIIIIIIIIIIIIIIIII        PPPPPPPPPPPPPPPPP        VVVVVVVV           VVVVVVVV
