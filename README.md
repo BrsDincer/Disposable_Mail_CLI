@@ -2,6 +2,7 @@
 Disposable Mail & READ/BURN Messages
 
 for WWW:
+
 https://share.streamlit.io/brsdincer/disposable_mail_privacy/main/disposable_main_stream.py
 
 **[-g]**
@@ -48,9 +49,12 @@ You can access it through TOR Browser
 
 Example for pass:
 
+
 PASS:geADAES231aSwEExc[:]
 
+
 "PASS:" must be at the beginning of the password, and at the end you have to use "[:]" Everything you specify between is a password
+
 
 Determine what you want
 
