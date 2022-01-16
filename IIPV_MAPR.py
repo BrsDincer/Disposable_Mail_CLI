@@ -74,7 +74,8 @@ class CREATOR_MESSAGE():
                   
                   [ -g ]  --get                       -> GET NEW DISPOSABLE MAIL
                   [ -r ]  --read                      -> READ MESSAGE
-                  [ -T ]  --readwithtor               -> READ MESSAGE WITH TOR CONNECTION
+                  [ -T ]  --readwithtor               -> READ MESSAGE VIA TOR CONNECTION
+                  [ -E ]  --getwithpass               -> READ MESSAGE WITH PASSWORD VIA TOR CONNECTION 
                   
                   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                   -------------------------------------------------------------------------------------
@@ -165,88 +166,105 @@ class SEND_REQUESTS():
 
 class TOR_CONNECTION():
     def RUN_TOR(from_use,subject_use,body_use):
-        html_main = """
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta name="viewport" content="width=device-width">
-<style>
-/* BODY CSS */
-body {
-background-color: white;
-text-align: left;
-line-height: 1.5;
-letter-spacing: 0.4px;
-color: #363636;
-font-family: Monaco, sans-serif;
-font-size: 15px;
-padding-right: 20px;
-padding-left: 20px;
-}
-/* H2 H3 CSS */
-h2, h3 {
-color: #a30000;
-font-family: Verdana, sans-serif;
-font-size: 18px;
-letter-spacing: 5px;
-text-align: left;
-padding-top: 4px;
-padding-right: 20px;
-padding-left: 20px;
-margin-left: 20px;
-margin-right: 20px;
-overflow: auto;
-}
-h4 {
-color: black;
-font-family: Verdana, sans-serif;
-font-size: 14px;
-letter-spacing: 5px;
-text-align: left;
-padding-top: 4px;
-padding-left: 20px;
-padding-right: 20px;
-margin-left: 20px;
-margin-right: 20px;
-overflow: auto;
-}
-/* P CSS */
-p {
-padding-left: 20px;
-padding-right: 20px;
-margin-left: 20px;
-margin-right: 20px;
-overflow: auto;
-}
-</style>
-<title>IIPV</title>
-</head>
-<body>
-<h2>DISPOSABLE MAIL PRIVACY</h2>
-<h4>FROM: %s</h4>
-<h4>SUBJECT: %s</h4>
-%s
-</body>
-</html>
-"""%(from_use,subject_use,body_use)
-        app = Flask(__name__,template_folder='template')
-        @app.route('/')
-        def index():
-          return html_main
-        print("\n")
-        print('[  CONNECTING TO TOR BASE  ]')
-        with Controller.from_port() as controller:
-              controller.authenticate()
-              response = controller.create_ephemeral_hidden_service({80: 5000}, await_publication = True)
-              print("\n")
-              print("SERVICE IS AVAILABLE: [--> %s.onion ]" % response.service_id)
-              print("PLEASE USE TOR BROWSER TO CHECK YOUR MESSAGE")
-              print("\n")
-              try:
-                  app.run(debug=False)
-              finally:
+        try:
+            html_main = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta name="viewport" content="width=device-width">
+    <style>
+    /* BODY CSS */
+    body {
+    background-color: white;
+    text-align: left;
+    line-height: 1.5;
+    letter-spacing: 0.4px;
+    color: #363636;
+    font-family: Monaco, sans-serif;
+    font-size: 15px;
+    padding-right: 20px;
+    padding-left: 20px;
+    }
+    /* H2 H3 CSS */
+    h2, h3 {
+    color: #a30000;
+    font-family: Verdana, sans-serif;
+    font-size: 18px;
+    letter-spacing: 5px;
+    text-align: left;
+    padding-top: 4px;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    overflow: auto;
+    }
+    h4 {
+    color: black;
+    font-family: Verdana, sans-serif;
+    font-size: 14px;
+    letter-spacing: 5px;
+    text-align: left;
+    padding-top: 4px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    overflow: auto;
+    }
+    /* P CSS */
+    p {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    overflow: auto;
+    }
+    </style>
+    <title>IIPV</title>
+    </head>
+    <body>
+    <h2>DISPOSABLE MAIL PRIVACY</h2>
+    <h4>FROM: %s</h4>
+    <h4>SUBJECT: %s</h4>
+    %s
+    </body>
+    </html>
+    """%(from_use,subject_use,body_use)
+            app = Flask(__name__,template_folder='template')
+            @app.route('/')
+            def index():
+              return html_main
+            print("\n")
+            print('[  CONNECTING TO TOR BASE  ]')
+            with Controller.from_port() as controller:
+                  controller.authenticate()
+                  response = controller.create_ephemeral_hidden_service({80: 5000}, await_publication = True)
                   print("\n")
-                  print("[SHUTTING DOWN BY USER]")
+                  print("SERVICE IS AVAILABLE: [--> %s.onion ]" % response.service_id)
+                  print("PLEASE USE TOR BROWSER TO CHECK YOUR MESSAGE")
+                  print("\n")
+                  try:
+                      app.run(debug=False)
+                  finally:
+                      print("\n")
+                      print("[SHUTTING DOWN BY USER]")
+        except:
+            print("\n")
+            print("TOR IS NOT ACTIVE")
+            print("\n")
+
+class SPLIT_MESSAGE():
+    def DEFINE_PASS(target_body):
+        try:
+            read_body = target_body.split("\n")
+            for x_in_read in read_body:
+                if "PASS:" in x_in_read.replace(" ",""):
+                    split_pass = x_in_read.replace(" ","").split("PASS:")
+                    get_last_pass = split_pass[1].split("[:]")
+                    return get_last_pass[0]
+        except:
+            pass
 
 class DEFINE_PROCESS():
     def GET_NEW_MAIL():
@@ -286,6 +304,7 @@ class DEFINE_PROCESS():
             print("[>] COMPLETED")
             print("\n")
             print("[>] IGNORE FORMATS OF HTML")
+            print("\n")
             print(f"MAIL FROM: {fetch_json['mail_from']}")
             print(f"MAIL SUBJECT: {fetch_json['mail_subject']}")
             print("\n")
@@ -301,37 +320,88 @@ class DEFINE_PROCESS():
             print("MAIL MAY BE DELETED OR NOT YET AVAILABLE, CHECK LATER")
             print("\n")
     
-    def GET_MESSAGE_WITH_TOR(user_input):
+    def GET_MESSAGE_WITH_TOR(user_input,pass_on=False):
         try:
-            cont_before_mail = f"http://api.guerrillamail.com/ajax.php?f=set_email_user&email_user={str(user_input)}"
-            check_mail = "http://api.guerrillamail.com/ajax.php?f=check_email&seq=1"
-            header_target = GET_DOCUMENT.GET_HEADER()
-            r_q = requests.Session()
-            r_q.get(cont_before_mail,
-                    headers=header_target)
-            get_mail = json.loads(r_q.get(check_mail,headers=header_target).text)
-            mail_id = get_mail['list'][0]['mail_id']
-            fetch_mail_on = f"http://api.guerrillamail.com/ajax.php?f=fetch_email&email_id={mail_id}"
-            fetch_get = r_q.get(fetch_mail_on,
-                                headers=header_target)
-            fetch_json = json.loads(fetch_get.text)
-            print("\n")
-            print("[>] Be sure to save the message before closing or refreshing the page")
-            print("\n")
-            print("[>] MESSAGE WILL BE DELETED AFTER SHUTDOWN")
-            print("[>] SITE WILL BE BLOCKED WHEN YOU TURN OFF THE CONNECTION")
-            print("[>] CONNECTIVITY MAY BE SLOW DEPENDING ON YOUR INTERNET, PLEASE WAIT")
-            print("[>] STARTING...")
-            print("\n")
-            TOR_CONNECTION.RUN_TOR(fetch_json['mail_from'],
-                                   fetch_json['mail_subject'],
-                                   fetch_json["mail_body"])
-            delete_mail = f"http://api.guerrillamail.com/ajax.php?f=del_email&email_ids[]={mail_id}"
-            r_q.get(delete_mail)
-            print("\n")
-            print("[>] MAIL HAS BEEN DELETED")
-            print("\n")
-            r_q.close()
+            if pass_on == False:
+                cont_before_mail = f"http://api.guerrillamail.com/ajax.php?f=set_email_user&email_user={str(user_input)}"
+                check_mail = "http://api.guerrillamail.com/ajax.php?f=check_email&seq=1"
+                header_target = GET_DOCUMENT.GET_HEADER()
+                r_q = requests.Session()
+                r_q.get(cont_before_mail,
+                        headers=header_target)
+                get_mail = json.loads(r_q.get(check_mail,headers=header_target).text)
+                mail_id = get_mail['list'][0]['mail_id']
+                print(CREATOR_MESSAGE.MAIN_PRINT())
+                fetch_mail_on = f"http://api.guerrillamail.com/ajax.php?f=fetch_email&email_id={mail_id}"
+                fetch_get = r_q.get(fetch_mail_on,
+                                    headers=header_target)
+                fetch_json = json.loads(fetch_get.text)
+                print("\n")
+                print("[>] Be sure to save the message before closing or refreshing the page")
+                print("\n")
+                print("[>] MESSAGE WILL BE DELETED AFTER SHUTDOWN")
+                print("[>] SITE WILL BE BLOCKED WHEN YOU TURN OFF THE CONNECTION")
+                print("[>] CONNECTIVITY MAY BE SLOW DEPENDING ON YOUR INTERNET, PLEASE WAIT")
+                print("[>] STARTING...")
+                print("\n")
+                TOR_CONNECTION.RUN_TOR(fetch_json['mail_from'],
+                                       fetch_json['mail_subject'],
+                                       fetch_json["mail_body"])
+                delete_mail = f"http://api.guerrillamail.com/ajax.php?f=del_email&email_ids[]={mail_id}"
+                r_q.get(delete_mail)
+                print("\n")
+                print("[>] MAIL HAS BEEN DELETED")
+                print("\n")
+                r_q.close()
+            elif pass_on == True:
+                print("\n")
+                cont_before_mail = f"http://api.guerrillamail.com/ajax.php?f=set_email_user&email_user={str(user_input)}"
+                check_mail = "http://api.guerrillamail.com/ajax.php?f=check_email&seq=1"
+                header_target = GET_DOCUMENT.GET_HEADER()
+                r_q = requests.Session()
+                r_q.get(cont_before_mail,
+                        headers=header_target)
+                get_mail = json.loads(r_q.get(check_mail,
+                                              headers=header_target).text)
+                mail_id = get_mail['list'][0]['mail_id']
+                mail_exp = get_mail['list'][0]['mail_excerpt']
+                print(CREATOR_MESSAGE.MAIN_PRINT())
+                print("\n")
+                user_input_pass = input("TYPE YOUR PASSWORD WHICH YOU GOT FROM SENDER: ")
+                print("\n")
+                fetch_mail_on = f"http://api.guerrillamail.com/ajax.php?f=fetch_email&email_id={mail_id}"
+                fetch_get = r_q.get(fetch_mail_on,
+                                    headers=header_target)
+                fetch_json = json.loads(fetch_get.text)
+                pass_accept = SPLIT_MESSAGE.DEFINE_PASS(mail_exp)
+                if str(user_input_pass) == str(pass_accept):
+                    print("\n")
+                    print("[>] PASSWORD IS ACCEPTABLE")
+                    print("[>] Be sure to save the message before closing or refreshing the page")
+                    print("\n")
+                    print("[>] MESSAGE WILL BE DELETED AFTER SHUTDOWN")
+                    print("[>] SITE WILL BE BLOCKED WHEN YOU TURN OFF THE CONNECTION")
+                    print("[>] CONNECTIVITY MAY BE SLOW DEPENDING ON YOUR INTERNET, PLEASE WAIT")
+                    print("[>] STARTING...")
+                    print("\n")
+                    TOR_CONNECTION.RUN_TOR(fetch_json['mail_from'],
+                                           fetch_json['mail_subject'],
+                                           fetch_json["mail_body"])
+                    delete_mail = f"http://api.guerrillamail.com/ajax.php?f=del_email&email_ids[]={mail_id}"
+                    r_q.get(delete_mail)
+                    print("\n")
+                    print("[>] MAIL HAS BEEN DELETED")
+                    print("\n")
+                    r_q.close()
+                elif str(user_input_pass) != str(pass_accept):
+                    print("\n")
+                    print("PASSWORD IS NOT CORRECT")
+                    print("\n")
+                else:
+                   pass 
+            else:
+                CREATOR_MESSAGE.SHOW_INFO()
+                pass
         except:
             print("\n")
             print("MAIL MAY BE DELETED OR NOT YET AVAILABLE, CHECK LATER")
@@ -359,7 +429,12 @@ class RUN_MAIN():
                             "--readwithtor",
                             type="string",
                             dest="x_tor",
-                            help="READ MESSAGE WITH TOR CONNECTION")
+                            help="READ MESSAGE VIA TOR CONNECTION")
+        run_args.add_option("-E",
+                            "--getwithpass",
+                            type="string",
+                            dest="x_getpass",
+                            help="READ MESSAGE WITH PASSWORD VIA TOR CONNECTION")
         run_ops,arq_ops = run_args.parse_args()
         if run_ops.x_help:
             CREATOR_MESSAGE.SHOW_INFO()
@@ -372,9 +447,13 @@ class RUN_MAIN():
         elif run_ops.x_tor:
             mail_target = str(run_ops.x_tor).replace(" ","")
             DEFINE_PROCESS.GET_MESSAGE_WITH_TOR(mail_target)
+        elif run_ops.x_getpass:
+            mail_target = str(run_ops.x_getpass).replace(" ","")
+            DEFINE_PROCESS.GET_MESSAGE_WITH_TOR(mail_target,pass_on=True)
         else:
             CREATOR_MESSAGE.SHOW_INFO()
             pass
+
 
 if __name__ == "__main__":
     try:
